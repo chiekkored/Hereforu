@@ -1,0 +1,32 @@
+.home {
+	background-color: #FFBD1D;
+}
+
+.wall {
+	background-color: #e9e9e9;
+}
+
+.feed-item:hover{
+	border: 1px solid #808080;
+	margin: 0;
+}
+
+.ta-expand {
+	-webkit-transition: height 0.2s;
+	-moz-transition: height 0.2s;
+	transition: height 0.2s;
+}
+
+.btn-overlay{
+	position: absolute;
+	z-index: 10;
+	left: 0;
+	right: 0;
+}
+
+.sticky-panel {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 60px;
+    z-index: 1010;
+}
