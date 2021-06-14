@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Admin extends CI_Controller {
 
-	public function __construct() {
+    public function __construct() {
         parent::__construct();
         $this->load->model('cms_model');
         $this->load->model('logs_model');
@@ -12,965 +12,349 @@ class Admin extends CI_Controller {
         
     }
 
-    private function check_admin()
+    public function index()
     {
-        $isadmin = $this->cms_model->is_admin($this->session->userdata('SESS_USER_ID'));
-
-        return $isadmin;
         
+        $this->load->view('pages/cms/dashboard');
     }
-
-	public function index()
-	{
-        // Check if user is logged in
-		if($this->session->userdata('SESS_IS_LOGGED')) {
-            // Check if admin account exist
-            if ($this->check_admin()) {
-
-                $this->load->view('pages/cms/dashboard');
-            }else{
-                // If admin account doesn't exit
-                $this->session->sess_destroy();
-                redirect('', 'refresh');
-            }
-
-        }else{
-            // If user is not logged in
-        	$this->load->view('pages/cms/login');
-        }
-	}
 
     // Admin posts page
-    public function posts()
+    public function sell()
     {
-        if($this->session->userdata('SESS_IS_LOGGED')) {
-            if ($this->check_admin()) {
-
-                $this->load->view('pages/cms/posts');
-            }else{
-
-                $this->session->sess_destroy();
-                redirect('', 'refresh');
-            }
-
-        }else{
-
-            redirect('', 'refresh');
-        }
-    }
-
-    // Admin reports page
-    public function reports()
-    {
-        if($this->session->userdata('SESS_IS_LOGGED')) {
-            if ($this->check_admin()) {
-
-                $this->load->view('pages/cms/reports');
-            }else{
-
-                $this->session->sess_destroy();
-                redirect('', 'refresh');
-            }
-
-        }else{
-
-            redirect('', 'refresh');
-        }
+        $this->load->view('pages/cms/sell');
     }
 
     // Admin users page
-    public function users()
+    public function customers()
     {
-        if($this->session->userdata('SESS_IS_LOGGED')) {
-            if ($this->check_admin()) {
-
-                $this->load->view('pages/cms/users');
-            }else{
-
-                $this->session->sess_destroy();
-                redirect('', 'refresh');
-            }
-
-        }else{
-
-            redirect('', 'refresh');
-        }
+        $this->load->view('pages/cms/customers');
     }
 
-    // Admin logs page
+    // Admin users page
+    public function sales()
+    {
+        $this->load->view('pages/cms/sales');
+    }
+
+    // Admin users page
     public function logs()
     {
-        if($this->session->userdata('SESS_IS_LOGGED')) {
-            if ($this->check_admin()) {
-
-                $this->load->view('pages/cms/logs');
-            }else{
-
-                $this->session->sess_destroy();
-                redirect('', 'refresh');
-            }
-
-        }else{
-
-            redirect('', 'refresh');
-        }
+        $this->load->view('pages/cms/logs');
     }
 
-    // Get activity logs
-    public function get_logs()
-    {
-        if($this->session->userdata('SESS_IS_LOGGED')) {
-            if ($this->check_admin()) {
-
-                echo json_encode($this->cms_model->get_logs());
-            }else{
-
-                $this->session->sess_destroy();
-                redirect('', 'refresh');
-            }
-
-        }else{
-
-            redirect('', 'refresh');
-        }
-    }
-
-    // Get users account
-    public function get_users()
-    {
-        if($this->session->userdata('SESS_IS_LOGGED')) {
-            if ($this->check_admin()) {
-
-                echo json_encode($this->cms_model->get_users());
-            }else{
-
-                $this->session->sess_destroy();
-                redirect('', 'refresh');
-            }
-
-        }else{
-
-            redirect('', 'refresh');
-        }
-    }
-
-    // Get admin accounts
-    public function get_admin()
-    {
-        if($this->session->userdata('SESS_IS_LOGGED')) {
-            if ($this->check_admin()) {
-
-                echo json_encode($this->cms_model->get_admins());
-            }else{
-
-                $this->session->sess_destroy();
-                redirect('', 'refresh');
-            }
-
-        }else{
-
-            redirect('', 'refresh');
-        }
-    }
-
-    // Get admin posts
-    public function posts_admin()
-    {
-        if($this->session->userdata('SESS_IS_LOGGED')) {
-            if ($this->check_admin()) {
-
-                $postData = $this->cms_model->get_admin_posts();
-
-                echo json_encode($postData);
-            }else{
-
-                $this->session->sess_destroy();
-                redirect('', 'refresh');
-            }
-
-        }else{
-
-            redirect('', 'refresh');
-        }
-    }
-
-    // Add admin posts
-    public function add_post()
-    {
-        if($this->session->userdata('SESS_IS_LOGGED')) {
-            if ($this->check_admin()) {
-                if ($this->input->is_ajax_request()) {
-
-                    $postInfo['sm_title'] = $this->input->post('sm_title');
-                    $postInfo['sm_content'] = $this->input->post('sm_content');
-                    $postInfo['sm_type'] = $this->input->post('sm_type');
-                    $postInfo['sm_created_by'] = $this->session->userdata('SESS_USERNAME');
-
-                    $this->logs_model->log($this->session->userdata('SESS_USER_ID'),
-                    $this->session->userdata('SESS_USERNAME') . ' added an admin post: '. $this->input->post('sm_title'));
-
-                    $this->cms_model->add_post($postInfo);
-
-                    echo json_encode('success');
-
-                } else {
-                    redirect('', 'refresh');
-                }
-            } else {
-
-                $this->session->sess_destroy();
-                redirect('', 'refresh');
-            }
-
-        }else{
-
-            redirect('', 'refresh');
-        }
-    }
-
-    // View admin posts
-    public function view_post()
-    {
-        if($this->session->userdata('SESS_IS_LOGGED')) {
-            if ($this->check_admin()) {
-                if ($this->input->is_ajax_request()) {
-
-                    echo json_encode($this->cms_model->view_post($this->input->post('sm_id')));
-
-                } else {
-                    redirect('', 'refresh');
-                }
-            } else {
-
-                $this->session->sess_destroy();
-                redirect('', 'refresh');
-            }
-
-        }else{
-
-            redirect('', 'refresh');
-        }
-    }
-
-    // Edit admin posts
-    public function edit_post()
-    {
-        if($this->session->userdata('SESS_IS_LOGGED')) {
-            if ($this->check_admin()) {
-                if ($this->input->is_ajax_request()) {
-
-                    $sm_id = $this->input->post('sm_id');
-                    $postInfo['sm_title'] = $this->input->post('sm_title');
-                    $postInfo['sm_content'] = $this->input->post('sm_content');
-                    $postInfo['sm_type'] = $this->input->post('sm_type');
-                    $postInfo['sm_created_by'] = $this->session->userdata('SESS_USERNAME');
-
-                    $this->cms_model->edit_post($postInfo, $sm_id);
-
-                    $this->logs_model->log($this->session->userdata('SESS_USER_ID'),
-                    $this->session->userdata('SESS_USERNAME') . ' edited an admin post: '. $this->input->post('sm_title'));
-
-                    echo json_encode('success');
-
-                } else {
-                    redirect('', 'refresh');
-                }
-            } else {
-
-                $this->session->sess_destroy();
-                redirect('', 'refresh');
-            }
-
-        }else{
-
-            redirect('', 'refresh');
-        }
-    }
-
-    // Delete admin posts
-    public function delete_post()
-    {
-        if($this->session->userdata('SESS_IS_LOGGED')) {
-            if ($this->check_admin()) {
-                if ($this->input->is_ajax_request()) {
-
-                    $this->cms_model->delete_post($this->input->post('sm_id'));
-
-                    $this->logs_model->log($this->session->userdata('SESS_USER_ID'),
-                    $this->session->userdata('SESS_USERNAME') . ' deleted an admin post (sitemetadata id: '. $this->input->post('sm_id').')');
-
-                    echo json_encode('success');
-
-                } else {
-                    redirect('', 'refresh');
-                }
-            } else {
-
-                $this->session->sess_destroy();
-                redirect('', 'refresh');
-            }
-
-        }else{
-
-            redirect('', 'refresh');
-        }
-    }
-
-    // Get users posts
-    public function posts_users()
-    {
-        if($this->session->userdata('SESS_IS_LOGGED')) {
-            if ($this->check_admin()) {
-                if ($this->input->is_ajax_request()) {
-
-                    $postData = $this->cms_model->get_users_posts();
-
-                    echo json_encode($postData);
-
-                } else {
-                    redirect('', 'refresh');
-                }
-
-            }else{
-
-                $this->session->sess_destroy();
-                redirect('', 'refresh');
-            }
-
-        }else{
-
-            redirect('', 'refresh');
-        }
-    }
-
-    // Recover users post
-    public function recover_post()
-    {
-        if($this->session->userdata('SESS_IS_LOGGED')) {
-            if ($this->check_admin()) {
-                if ($this->input->is_ajax_request()) {
-
-                    $this->cms_model->recover_user_post($this->input->post('post_id'));
-
-                    $this->logs_model->log($this->session->userdata('SESS_USER_ID'),
-                    $this->session->userdata('SESS_USERNAME') . ' recovered a post (post id: '. $this->input->post('post_id').')');
-
-                    echo json_encode('success');
-
-                } else {
-                    redirect('', 'refresh');
-                }
-                
-            }else{
-
-                $this->session->sess_destroy();
-                redirect('', 'refresh');
-            }
-
-        }else{
-
-            redirect('', 'refresh');
-        }
-    }
-
-    // Feature users post
-    public function feature_post()
-    {
-        if($this->session->userdata('SESS_IS_LOGGED')) {
-            if ($this->check_admin()) {
-                if ($this->input->is_ajax_request()) {
-
-                    $this->cms_model->feature_user_post($this->input->post('post_id'));
-
-                    $this->logs_model->log($this->session->userdata('SESS_USER_ID'),
-                    $this->session->userdata('SESS_USERNAME') . ' featured a post (post id: '. $this->input->post('post_id').')');
-
-                    echo json_encode('success');
-
-                } else {
-                    redirect('', 'refresh');
-                }
-                
-            }else{
-
-                $this->session->sess_destroy();
-                redirect('', 'refresh');
-            }
-
-        }else{
-
-            redirect('', 'refresh');
-        }
-    }
-
-    // Unfeature users post
-    public function unfeature_post()
-    {
-        if($this->session->userdata('SESS_IS_LOGGED')) {
-            if ($this->check_admin()) {
-                if ($this->input->is_ajax_request()) {
-
-                    $this->cms_model->unfeature_user_post($this->input->post('post_id'));
-
-                    $this->logs_model->log($this->session->userdata('SESS_USER_ID'),
-                    $this->session->userdata('SESS_USERNAME') . ' unfeatured a post (post id: '. $this->input->post('post_id').')');
-
-                    echo json_encode('success');
-
-                } else {
-                    redirect('', 'refresh');
-                }
-                
-            }else{
-
-                $this->session->sess_destroy();
-                redirect('', 'refresh');
-            }
-
-        }else{
-
-            redirect('', 'refresh');
-        }
-    }
-
-    // Remove users post
-    public function remove_post()
-    {
-        if($this->session->userdata('SESS_IS_LOGGED')) {
-            if ($this->check_admin()) {
-                if ($this->input->is_ajax_request()) {
-
-                    $this->cms_model->remove_user_post($this->input->post('post_id'));
-
-                    $this->logs_model->log($this->session->userdata('SESS_USER_ID'),
-                    $this->session->userdata('SESS_USERNAME') . ' removed a post (post id: '. $this->input->post('post_id').')');
-
-                    echo json_encode('success');
-
-                } else {
-                    redirect('', 'refresh');
-                }
-                
-            }else{
-
-                $this->session->sess_destroy();
-                redirect('', 'refresh');
-            }
-
-        }else{
-
-            redirect('', 'refresh');
-        }
-    }
-
-    // Get reported posts
-    public function reported_posts()
-    {
-        if($this->session->userdata('SESS_IS_LOGGED')) {
-            if ($this->check_admin()) {
-
-                $postData = $this->cms_model->get_reported_posts();
-
-                echo json_encode($postData);
-            }else{
-
-                $this->session->sess_destroy();
-                redirect('', 'refresh');
-            }
-
-        }else{
-
-            redirect('', 'refresh');
-        }
-    }
-
-    // Get reported bugs
-    public function reported_bugs()
-    {
-        if($this->session->userdata('SESS_IS_LOGGED')) {
-            if ($this->check_admin()) {
-
-                $postData = $this->cms_model->get_reported_bugs();
-
-                echo json_encode($postData);
-            }else{
-
-                $this->session->sess_destroy();
-                redirect('', 'refresh');
-            }
-
-        }else{
-
-            redirect('', 'refresh');
-        }
-    }
-
-    // View reported post
-    public function reported_view()
-    {
-        if($this->session->userdata('SESS_IS_LOGGED')) {
-            if ($this->check_admin()) {
-                if ($this->input->is_ajax_request()) {
-
-                    $postData = $this->cms_model->view_reported_post($this->input->post('post_id'));
-
-                    echo json_encode($postData);
-
-                } else {
-                    redirect('', 'refresh');
-                }
-
-            }else{
-
-                $this->session->sess_destroy();
-                redirect('', 'refresh');
-            }
-
-        }else{
-
-            redirect('', 'refresh');
-        }
-    }
-
-    // Deny reported post
-    public function reported_deny()
-    {
-        if($this->session->userdata('SESS_IS_LOGGED')) {
-            if ($this->check_admin()) {
-                if ($this->input->is_ajax_request()) {
-
-                    $this->cms_model->deny_reported_post($this->input->post('report_id'));
-
-                    $this->logs_model->log($this->session->userdata('SESS_USER_ID'),
-                    $this->session->userdata('SESS_USERNAME') . ' denied a report (report id: '. $this->input->post('report_bug_id').')');
-
-                    echo json_encode('success');
-
-                } else {
-                    redirect('', 'refresh');
-                }
-
-            }else{
-
-                $this->session->sess_destroy();
-                redirect('', 'refresh');
-            }
-
-        }else{
-
-            redirect('', 'refresh');
-        }
-    }
-
-    // Remove reported post
-    public function reported_remove()
-    {
-        if($this->session->userdata('SESS_IS_LOGGED')) {
-            if ($this->check_admin()) {
-                if ($this->input->is_ajax_request()) {
-
-                    $this->cms_model->update_report($this->input->post('report_id'));
-                    $this->cms_model->remove_reported_post($this->input->post('post_id'));
-
-                    $this->logs_model->log($this->session->userdata('SESS_USER_ID'),
-                    $this->session->userdata('SESS_USERNAME') . ' removed the reported post (post id: '. $this->input->post('report_bug_id').')');
-
-                    echo json_encode('success');
-
-                } else {
-                    redirect('', 'refresh');
-                }
-
-            }else{
-
-                $this->session->sess_destroy();
-                redirect('', 'refresh');
-            }
-
-        }else{
-
-            redirect('', 'refresh');
-        }
-    }
-
-    // Update bug report
-    public function reported_bug_done()
-    {
-        if($this->session->userdata('SESS_IS_LOGGED')) {
-            if ($this->check_admin()) {
-                if ($this->input->is_ajax_request()) {
-
-                    $this->cms_model->update_bug_done($this->input->post('report_bug_id'));
-
-                    $this->logs_model->log($this->session->userdata('SESS_USER_ID'),
-                    $this->session->userdata('SESS_USERNAME') . ' toggled a bug to done (report id: '. $this->input->post('report_bug_id').')');
-
-                    echo json_encode('success');
-
-                } else {
-                    redirect('', 'refresh');
-                }
-                
-            }else{
-
-                $this->session->sess_destroy();
-                redirect('', 'refresh');
-            }
-
-        }else{
-
-            redirect('', 'refresh');
-        }
-    }
-
-    // Deactivate user
-    public function deactivate_user()
-    {
-        if($this->session->userdata('SESS_IS_LOGGED')) {
-            if ($this->check_admin()) {
-                if ($this->input->is_ajax_request()) {
-
-                    $this->cms_model->deactivate_user($this->input->post('user_id'));
-
-                    $this->logs_model->log($this->session->userdata('SESS_USER_ID'),
-                    $this->session->userdata('SESS_USERNAME') . ' deactivated the user: '. $this->input->post('user_id'));
-
-                    echo json_encode('success');
-
-                } else {
-                    redirect('', 'refresh');
-                }
-                
-            }else{
-
-                $this->session->sess_destroy();
-                redirect('', 'refresh');
-            }
-
-        }else{
-
-            redirect('', 'refresh');
-        }
-    }
-
-    // Activate user
-    public function activate_user()
-    {
-        if($this->session->userdata('SESS_IS_LOGGED')) {
-            if ($this->check_admin()) {
-                if ($this->input->is_ajax_request()) {
-
-                    $this->cms_model->activate_user($this->input->post('user_id'));
-
-                    $this->logs_model->log($this->session->userdata('SESS_USER_ID'),
-                    $this->session->userdata('SESS_USERNAME') . ' activated the user: '. $this->input->post('user_id'));
-
-                    echo json_encode('success');
-
-                } else {
-                    redirect('', 'refresh');
-                }
-                
-            }else{
-
-                $this->session->sess_destroy();
-                redirect('', 'refresh');
-            }
-
-        }else{
-
-            redirect('', 'refresh');
-        }
-    }
-
-    // Ban user IP
-    public function ban_user()
-    {
-        if($this->session->userdata('SESS_IS_LOGGED')) {
-            if ($this->check_admin()) {
-                if ($this->input->is_ajax_request()) {
-
-                    $accountInfo['ip_address'] = $this->input->post('ipa');
-
-                    $this->cms_model->ban_user($accountInfo);
-                    $this->cms_model->ban_useraccount($this->input->post('ipa'));
-
-                    $this->logs_model->log($this->session->userdata('SESS_USER_ID'),
-                    $this->session->userdata('SESS_USERNAME') . ' banned the ip address: '. $this->input->post('ipa'));
-
-                    echo json_encode('success');
-
-                } else {
-                    redirect('', 'refresh');
-                }
-                
-            }else{
-
-                $this->session->sess_destroy();
-                redirect('', 'refresh');
-            }
-
-        }else{
-
-            redirect('', 'refresh');
-        }
-    }
-
-    // Unban user IP
-    public function unban_user()
-    {
-        if($this->session->userdata('SESS_IS_LOGGED')) {
-            if ($this->check_admin()) {
-                if ($this->input->is_ajax_request()) {
-
-                    $this->cms_model->unban_user($this->input->post('ipa'));
-                    $this->cms_model->unban_useraccount($this->input->post('ipa'));
-
-                    $this->logs_model->log($this->session->userdata('SESS_USER_ID'),
-                    $this->session->userdata('SESS_USERNAME') . ' unbanned the ip address: '. $this->input->post('ipa'));
-                    echo json_encode('success');
-
-                } else {
-                    redirect('', 'refresh');
-                }
-                
-            }else{
-
-                $this->session->sess_destroy();
-                redirect('', 'refresh');
-            }
-
-        }else{
-
-            redirect('', 'refresh');
-        }
-    }
-
-    // Change pass admin by superadmin
-    public function admin_change_pass()
-    {
-        if($this->session->userdata('SESS_IS_LOGGED')) {
-            if ($this->check_admin()) {
-                if ($this->input->is_ajax_request()) {
-
-                    $this->cms_model->admin_change_password($this->input->post('user_id'), $this->input->post('password'));
-
-                    $this->logs_model->log($this->session->userdata('SESS_USER_ID'),
-                    $this->session->userdata('SESS_USERNAME') . ' changed the password for admin: '. $this->input->post('user_id'));
-
-                    echo json_encode('success');
-
-                } else {
-                    redirect('', 'refresh');
-                }
-                
-            }else{
-
-                $this->session->sess_destroy();
-                redirect('', 'refresh');
-            }
-
-        }else{
-
-            redirect('', 'refresh');
-        }
-    }
-
-    // Deactivate user
-    public function deactivate_admin()
-    {
-        if($this->session->userdata('SESS_IS_LOGGED')) {
-            if ($this->check_admin()) {
-                if ($this->input->is_ajax_request()) {
-
-                    $this->cms_model->deactivate_admin($this->input->post('user_id'));
-
-                    $this->logs_model->log($this->session->userdata('SESS_USER_ID'),
-                    $this->session->userdata('SESS_USERNAME') . ' deactivated the admin: '. $this->input->post('user_id'));
-
-                    echo json_encode('success');
-
-                } else {
-                    redirect('', 'refresh');
-                }
-                
-            }else{
-
-                $this->session->sess_destroy();
-                redirect('', 'refresh');
-            }
-
-        }else{
-
-            redirect('', 'refresh');
-        }
-    }
-
-    // Activate user
-    public function activate_admin()
-    {
-        if($this->session->userdata('SESS_IS_LOGGED')) {
-            if ($this->check_admin()) {
-                if ($this->input->is_ajax_request()) {
-
-                    $this->cms_model->activate_admin($this->input->post('user_id'));
-
-                    $this->logs_model->log($this->session->userdata('SESS_USER_ID'),
-                    $this->session->userdata('SESS_USERNAME') . ' deactivated the admin: '. $this->input->post('user_id'));
-
-                    echo json_encode('success');
-
-                } else {
-                    redirect('', 'refresh');
-                }
-                
-            }else{
-
-                $this->session->sess_destroy();
-                redirect('', 'refresh');
-            }
-
-        }else{
-
-            redirect('', 'refresh');
-        }
-    }
-
-    // Change pass admin
-    public function change_pass()
-    {
-        if($this->session->userdata('SESS_IS_LOGGED')) {
-            if ($this->check_admin()) {
-                if ($this->input->is_ajax_request()) {
-
-                    $this->cms_model->change_password($this->input->post('cur_password'), $this->input->post('password'));
-
-                    $this->logs_model->log($this->session->userdata('SESS_USER_ID'),
-                    $this->session->userdata('SESS_USERNAME') . ' changed its password');
-
-                    echo json_encode('success');
-
-                } else {
-                    redirect('', 'refresh');
-                }
-                
-            }else{
-
-                $this->session->sess_destroy();
-                redirect('', 'refresh');
-            }
-
-        }else{
-
-            redirect('', 'refresh');
-        }
-    }
-
-
-	public function login()
-	{
+    public function add_sell() {
         // Check if this is an AJAX request
         if($this->input->is_ajax_request()) {
-            $username =  $this->input->post('username');
-            $password =  $this->input->post('password');
+
+            if ($this->input->post('customer_name')) {
+
+                $customerInfo['customer_uuid'] = md5(uniqid());
+                $customerInfo['name'] = ucfirst($this->input->post('customer_name'));
+                $this->cms_model->add_new_customer($customerInfo);
+
+                // Insert customer
+                $sellInfo['customer_uuid'] = $customerInfo['customer_uuid'];
+                $sellInfo['mine_code'] = $this->input->post('mine_code');
+                $sellInfo['price'] = $this->input->post('price');
+
+                $this->logs_model->log('Added miner: '. ucfirst($this->input->post('customer_name')).' (<i>code: '.$this->input->post('mine_code').')</i>');
+            } else {
+
+                // Insert customer
+                $sellInfo['customer_uuid'] = $this->input->post('customer_uuid');
+                $sellInfo['mine_code'] = $this->input->post('mine_code');
+                $sellInfo['price'] = $this->input->post('price');
+
+                $customerDetails = $this->cms_model->get_customer($this->input->post('customer_uuid'));
+
+                $this->logs_model->log('Added miner: '. $customerDetails['name'].' (<i>code: '.$this->input->post('mine_code').')</i>');
+            }
             
-            //call the model for auth
-            $userData = $this->cms_model->login($username, $password);
+            // if ( isset($_FILES['user_image']) ) {
+            //     $userInfo['user_image'] = $this->do_upload('user_image');
+            //     if ($userInfo['user_image'] == "false") {
+            //         $userInfo['user_image'] = "";
+            //     }
+            // }
 
-            if($userData){
-                //account active
-                if ($userData['status'] == 0) {
-                    $value['success'] = 1;
-                    //update remember token every login
-                    // $this->Auth_model->update_rem_token($userData['user_id'], $this->input->post('csrf_token_name'));
-                    // //set cookies
-                    // $cookie = array(
-                    //     'name'   => 'CHIEEEEE',
-                    //     'value'  => substr(sha1(time()), 0, 16)
-                    // );
-                    // $this->input->set_cookie('yesirrrr', substr(sha1(time()), 0, 16));
-
-                    $this->logs_model->log($this->session->userdata('SESS_USER_ID'),
-                    $this->session->userdata('SESS_USERNAME') . ' has logged in');
-                    
-                //account deactivated
-                } else if($userData['status'] == 1){
-                    $value['success'] = 0;
-                    $value['error_message'] = 'You account has been deactivated. Contact super administrator.';
-                    // $this->logs_model->log($this->session->userdata('SESS_USER_ID'),
-                    //     $this->session->userdata('SESS_USERNAME') . ' has tried to logged in');
-                    $this->session->sess_destroy();
-                }
-            }
-            else{
-                $value['success'] = 0;
-                $value['error_message'] = 'Invalid username or password!';
-            }
-
-            echo json_encode($value);
-        }else{
-            redirect('', 'refresh');
-        }
-    }
-
-    public function register() {
-        // Check if this is an AJAX request
-        if($this->input->is_ajax_request()) {
-            if ($this->check_admin()) {
-                if ($this->session->userdata('SESS_IS_LOGGED')) {
-                    if ($this->session->userdata('SESS_ROLE') == 'Superadmin') {
-                        // Insert user
-                        $userInfo[Cms_table::_UUID] = md5(uniqid());
-                        $userInfo[Cms_table::_USERNAME] = $this->input->post('username');
-                        $userInfo[Cms_table::_PASSWORD] = password_hash($this->input->post('password'), PASSWORD_BCRYPT);
-                        // $userInfo['unhash_p'] = $this->input->post('password');
-                        $userInfo[Cms_table::_ADMIN_ROLE] = 'Administrator';
-                        $userInfo[Cms_table::_CREATED_BY] = $this->session->userdata('SESS_USERNAME');
-                        // if ( isset($_FILES['user_image']) ) {
-                        //     $userInfo['user_image'] = $this->do_upload('user_image');
-                        //     if ($userInfo['user_image'] == "false") {
-                        //         $userInfo['user_image'] = "";
-                        //     }
-                        // }
-
-                        $resultUserInfo['id'] = $this->cms_model->register($userInfo);
-
-                        $this->logs_model->log($this->session->userdata('SESS_USER_ID'),
-                                $this->session->userdata('SESS_USERNAME') . ' registered the account: '.$this->input->post('username'));
-                        // $this->auth_model->login($this->input->post('username'), $this->input->post('password'));
-                        echo json_encode ($resultUserInfo);
-                    } else {
-                        redirect('', 'refresh');
-                    }
-                        
-                } else {
-                    redirect('', 'refresh');
-                }
-            } else {
-
-                $this->session->sess_destroy();
-                redirect('', 'refresh');
-            }
+            // Add customer
+            $resultSellInfo['id'] = $this->cms_model->add_sell($sellInfo);
+            // $this->auth_model->login($this->input->post('username'), $this->input->post('password'));
+            echo json_encode ($resultSellInfo);
             
         } else {
             redirect('', 'refresh');
         }
     }
 
-    public function logout(){
-        if($this->session->userdata('SESS_IS_LOGGED')) {
-            // If there are existing user session,
-            // the user session will be destroyed and the user is logged out
-            // $this->logs_model->log($this->session->userdata('SESS_USER_ID'),
-            // $this->session->userdata('SESS_USERNAME') . ' has logged out');
-            // delete_cookie('csrf_token_name');
-            $this->logs_model->log($this->session->userdata('SESS_USER_ID'),
-                    $this->session->userdata('SESS_USERNAME') . ' has logged out');
-            $this->session->sess_destroy();
+    public function add_customer() {
+        // Check if this is an AJAX request
+        if($this->input->is_ajax_request()) {
+
+            // Insert customer
+            $customerInfo['customer_uuid'] = md5(uniqid());
+            $customerInfo['name'] = ucfirst($this->input->post('name'));
+            $customerInfo['fb_link'] = $this->input->post('fb_link');
+            $customerInfo['address'] = ucwords($this->input->post('address'));
+            $customerInfo['phone_num'] = $this->input->post('phone_num');
+            // if ( isset($_FILES['user_image']) ) {
+            //     $userInfo['user_image'] = $this->do_upload('user_image');
+            //     if ($userInfo['user_image'] == "false") {
+            //         $userInfo['user_image'] = "";
+            //     }
+            // }
+
+            // Add customer
+            $resultCustomerInfo['id'] = $this->cms_model->add_customer($customerInfo);
+
+            $this->logs_model->log('Added customer: '.$this->input->post('name'));
+            // $this->auth_model->login($this->input->post('username'), $this->input->post('password'));
+            echo json_encode ($resultCustomerInfo);
+            
+        } else {
+            redirect('', 'refresh');
+        }
+    }
+
+    // Admin posts page
+    public function get_daily_sales()
+    {
+        $date = date('Y-m-d');
+        $dates = [];
+
+        for ($i=0; $i < 5; $i++) { 
+            array_push($dates, $this->cms_model->get_daily_sales($date)??0);
+            $date =  date('Y-m-d',(strtotime ( '-1 day' , strtotime ( $date))));
         }
 
-        // The user will be redirected to the login page,
-        // whether there exists a user session or not
-        redirect('', 'refresh');
+        echo json_encode($dates);
     }
+
+    // Admin posts page
+    public function get_customer()
+    {
+        echo json_encode($this->cms_model->get_customer($this->input->post('customer_uuid')));
+    }
+
+    // Admin posts page
+    public function get_all_customers()
+    {
+        echo json_encode($this->cms_model->get_all_customers());
+    }
+
+    // Admin posts page
+    public function get_active_customers()
+    {
+        echo json_encode($this->cms_model->get_active_customers());
+    }
+
+    // GET miners today
+    public function get_miners_today()
+    {
+        echo json_encode($this->cms_model->get_miners_today());
+    }
+
+    // GET sales today
+    public function get_sales_date()
+    {
+        echo json_encode($this->cms_model->get_sales_date());
+    }
+
+    // GET sales today
+    public function get_all_logs()
+    {
+        echo json_encode($this->cms_model->get_all_logs());
+    }
+
+    // VIEW all sales of customer
+    public function view_customer_sales()
+    {
+        echo json_encode($this->cms_model->view_customer_sales($this->input->get('uuid')));
+    }
+
+    // VIEW sales of customer on specified date
+    public function view_sales_customer()
+    {
+        echo json_encode($this->cms_model->view_sales_customer($this->input->post('customer_uuid'), $this->input->post('date_created')));
+    }
+
+
+    public function edit_customer() {
+        // Check if this is an AJAX request
+        if($this->input->is_ajax_request()) {
+
+            // Edit customer
+            $customer_uuid = $this->input->post('customer_uuid');
+            $customerInfo['fb_link'] = $this->input->post('fb_link');
+            $customerInfo['phone_num'] = $this->input->post('phone_num');
+            $customerInfo['address'] = ucwords($this->input->post('address'));
+            // if ( isset($_FILES['user_image']) ) {
+            //     $userInfo['user_image'] = $this->do_upload('user_image');
+            //     if ($userInfo['user_image'] == "false") {
+            //         $userInfo['user_image'] = "";
+            //     }
+            // }
+
+            // Add customer
+            $resultCustomerInfo['id'] = $this->cms_model->edit_customer($customer_uuid, $customerInfo);
+
+            $this->logs_model->log('Edited customer: '.$this->input->post('name'));
+            // $this->auth_model->login($this->input->post('username'), $this->input->post('password'));
+            echo json_encode ($resultCustomerInfo);
+            
+        } else {
+            redirect('', 'refresh');
+        }
+    }
+
+    // Hide customer
+    public function hide_customer()
+    {
+        $this->cms_model->hide_customer($this->input->post('customer_uuid'));
+
+        $customerDetails = $this->cms_model->get_customer($this->input->post('customer_uuid'));
+
+        $this->logs_model->log('Hidden a customer: '.$customerDetails['name']);
+
+        echo json_encode('success');
+    }
+
+    // Hide customer
+    public function unhide_customer()
+    {
+        $this->cms_model->unhide_customer($this->input->post('customer_uuid'));
+
+        $customerDetails = $this->cms_model->get_customer($this->input->post('customer_uuid'));
+
+        $this->logs_model->log('Unhidden a customer: '.$customerDetails['name']);
+
+        echo json_encode('success');
+    }
+
+    // Hide customer
+    public function remove_customer()
+    {
+        $this->cms_model->remove_customer($this->input->post('customer_uuid'));
+
+        $customerDetails = $this->cms_model->get_customer($this->input->post('customer_uuid'));
+
+        $this->logs_model->log('Removed a customer: '.$customerDetails['name']);
+
+        echo json_encode('success');
+    }
+
+    // Hide customer
+    public function remove_sell()
+    {
+        $this->cms_model->remove_sell($this->input->post('sell_id'));
+
+        $sellDetails = $this->cms_model->get_sell($this->input->post('sell_id'));
+
+        $this->logs_model->log('Removed a miner; Code: '.$sellDetails['mine_code']);
+
+        echo json_encode('success');
+    }
+
+    // Hide customer
+    public function toggle_sales_paid()
+    {
+        $this->cms_model->toggle_sales_paid($this->input->post('customer_uuid'), $this->input->post('date_created'));
+
+        $customerDetails = $this->cms_model->get_customer($this->input->post('customer_uuid'));
+
+        $this->logs_model->log('Toggle Paid to: '.$customerDetails['name'].' for '.date("F jS", strtotime($this->input->post('date_created'))));
+
+        echo json_encode('success');
+    }
+
+    // Hide customer
+    public function override_paid()
+    {
+        $this->cms_model->override_paid($this->input->post('sell_id'));
+
+        $sellDetails = $this->cms_model->get_sell($this->input->post('sell_id'));
+
+        $this->logs_model->log('Overidden an item to paid for customer: '. $sellDetails['name'].' <i>(code: '. $sellDetails['mine_code'].')</i>');
+
+        echo json_encode('success');
+    }
+
+    public function generate_invoice(){
+        $this->ggenerate_invoice();
+    }
+
+
+    private function ggenerate_invoice(){
+
+        $this->load->library('Phpfpdf');
+        $pdf = new Phpfpdf();
+        $pdf->AliasNbPages();
+
+        $pdf->AddPage();
+
+        $pdf->SetFont('Arial','B',16);
+
+        $customer_uuid = $this->input->post('customer_uuid');
+        $date_created = $this->input->post('date_created');
+        $salesDetails = $this->cms_model->view_sales_customer($this->input->post('customer_uuid'), $this->input->post('date_created'));
+
+        // // Title
+        $pdf->SetFont('Arial','B',22);
+        $pdf->Cell(190,10,'THRIFTEES & MORE INVOICE',0,0,'C');
+
+        $pdf->Ln();
+        $pdf->SetFont('Arial','',10);
+        $pdf->Cell(190,3,'0947 355 7763 | vsevilla416@gmail.com',0,0,'C');
+        $pdf->Ln();
+
+        $pdf->Ln();
+        $pdf->Cell(190,10,'',0,0,'C');
+        $pdf->Ln();
+
+        // // Body
+        $pdf->SetFont('Arial','B',12);
+        $pdf->Cell(15,10,'',0,0,'L');
+        $pdf->Cell(120,10,'Name: '.$salesDetails[0]['name'],0,0,'L');
+        $pdf->SetFont('Arial','',12);
+        $pdf->Cell(85,10,'Date: '.$salesDetails[0]['date_created'],0,0,'L');
+        $pdf->Ln();
+
+        $pdf->Cell(190,10,'',0,0,'C');
+        $pdf->Ln();
+
+        $pdf->Cell(15,10,'',0,0,'L');
+        $pdf->SetFont('Arial','B',10);
+        $pdf->Cell(130,10,'Items List(s):',0,0,'L');
+        $pdf->Ln();
+
+        $pdf->Cell(15,10,'',0,0,'L');
+        $pdf->CellFitScale(10,6, '#',1, 0, 'C');
+        $pdf->CellFitScale(110,6, 'Item Code',1, 0, 'C');
+        $pdf->CellFitScale(38,6, 'Price',1, 0, 'C');
+        $pdf->Ln();
+
+        $grandTotal = 0;
+
+        $pdf->SetFont('Arial','',10);
+        for($i=0; $i < count($salesDetails); $i++) {
+
+            $grandTotal = $salesDetails[$i]['price'] + $grandTotal;
+
+            $pdf->Cell(15,10,'',0,0,'L');
+            $pdf->CellFitScale(10,12, $i+1,1, 0, 'C');
+            $pdf->CellFitScale(110,12, $salesDetails[$i]['mine_code'],1, 0, 'C');
+            $pdf->CellFitScale(38,12, '         P '.number_format($salesDetails[$i]['price']),1, 0, 'L');
+            $pdf->Ln();
+        }
+
+        $pdf->Cell(110,10,'',0,0,'L');
+        $pdf->SetFont('Arial','B',10);
+        $pdf->Cell(34,10, 'Grand Total:',0,0,'L');
+        $pdf->SetFont('Arial','B',12);
+        $pdf->Cell(20,10, 'P '.number_format($grandTotal),0,0,'L');
+
+
+        $pdf->Output("D", $salesDetails[0]['date_created'].' - '.$salesDetails[0]['name'].".pdf");
+    }
+
 }

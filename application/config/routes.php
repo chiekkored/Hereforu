@@ -49,96 +49,79 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
 */
-switch ($_SERVER['HTTP_HOST']) {
-    case 'admin.hereforu.com':
-        $route['default_controller'] = "admin";
-		$route['login'] = 'admin/login';
-		$route['logout'] = 'admin/logout';
-		$route['dashboard'] = 'admin/index';
-		$route['posts'] = 'admin/posts';
-		$route['reports'] = 'admin/reports';
-		$route['users'] = 'admin/users';
-		$route['logs'] = 'admin/logs';
-		$route['posts/admin'] = 'admin/posts_admin';
-		$route['posts/users'] = 'admin/posts_users';
-		//Admin posts
-		$route['posts/add_post'] = 'admin/add_post';
-		$route['posts/view_post'] = 'admin/view_post';
-		$route['posts/edit_post'] = 'admin/edit_post';
-		$route['posts/delete_post'] = 'admin/delete_post';
-		//User posts
-		$route['posts/recover_post'] = 'admin/recover_post';
-		$route['posts/feature_post'] = 'admin/feature_post';
-		$route['posts/unfeature_post'] = 'admin/unfeature_post';
-		$route['posts/remove_post'] = 'admin/remove_post';
-		//Reports
-		$route['reports/posts'] = 'admin/reported_posts';
-		$route['reports/bugs'] = 'admin/reported_bugs';
-		$route['reports/view_post'] = 'admin/reported_view';
-		$route['reports/deny_report'] = 'admin/reported_deny';
-		$route['reports/remove_report'] = 'admin/reported_remove';
-		$route['reports/bug_done'] = 'admin/reported_bug_done';
-		//Users
-		$route['users/users'] = 'admin/get_users';
-		$route['users/admin'] = 'admin/get_admin';
-		$route['users/register'] = 'admin/register';
-		$route['users/deactivate_user'] = 'admin/deactivate_user';
-		$route['users/activate_user'] = 'admin/activate_user';
-		$route['users/ban_user'] = 'admin/ban_user';
-		$route['users/unban_user'] = 'admin/unban_user';
-		$route['users/admin_pass'] = 'admin/admin_change_pass';
-		$route['users/deactivate_admin'] = 'admin/deactivate_admin';
-		$route['users/activate_admin'] = 'admin/activate_admin';
+$route['default_controller'] = "admin";
+$route['dashboard'] = 'admin/index';
+$route['dashboard/get_daily_sales'] = 'admin/get_daily_sales';
 
-		$route['logs/get'] = 'admin/get_logs';
+$route['customers'] = 'admin/customers';
+$route['customers/get'] = 'admin/get_customer';
+$route['customers/get_all'] = 'admin/get_all_customers';
+$route['customers/add'] = 'admin/add_customer';
+$route['customers/edit'] = 'admin/edit_customer';
+$route['customers/hide'] = 'admin/hide_customer';
+$route['customers/show'] = 'admin/unhide_customer';
+$route['customers/remove'] = 'admin/remove_customer';
+$route['customers/view_customer_sales'] = 'admin/view_customer_sales';
+$route['customers/override_paid'] = 'admin/override_paid';
 
-		$route['change_pass'] = 'admin/change_pass';
+$route['sell'] = 'admin/sell';
+$route['sell/get_customers'] = 'admin/get_active_customers';
+$route['sell/get_today'] = 'admin/get_miners_today';
+$route['sell/add_sell'] = 'admin/add_sell';
+$route['sell/remove'] = 'admin/remove_sell';
 
-		$route['404_override'] = '';
-		$route['translate_uri_dashes'] = FALSE;
-        break;
-    case 'about.hereforu.com':
-    	$route['default_controller'] = "about";
-		$route['cookies'] = 'about/cookies';
-		$route['privacy'] = 'about/privacy';
-		$route['policy'] = 'about/policy';
-		$route['terms'] = 'about/terms';
-		$route['developer'] = 'about/developer';
+$route['sales'] = 'admin/sales';
+$route['sales/get'] = 'admin/get_sales_date';
+$route['sales/paid'] = 'admin/toggle_sales_paid';
+$route['sales/view_sales_customer'] = 'admin/view_sales_customer';
+$route['sales/generate_invoice'] = 'admin/generate_invoice';
 
-    	$route['404_override'] = '';
-		$route['translate_uri_dashes'] = FALSE;
-    	break;
-    default:
-        $route['default_controller'] = 'home';
-		$route['home'] = 'home/index';
-		$route['ban'] = 'home/banned';
-		$route['auth/register'] = 'auth/register';
-		$route['logout'] = 'auth/logout';
-		$route['login'] = 'login/index';
-		$route['loginguest'] = 'auth/guest';
-		$route['notice'] = 'home/get_notice';
-		$route['get_feed_a'] = 'home/get_feed_a';
-		$route['get_feed_mr'] = 'home/get_feed_mr';
-		// $route['get_feed_a/(:num)'] = 'home/get_feed_a/$1';
-		$route['get_feed_ng'] = 'home/get_feed_ng';
-		$route['post_feed'] = 'home/post_feed';
-		$route['get_tags'] = 'home/get_tags';
-		$route['report'] = 'home/report';
-		$route['report/post'] = 'home/post_report';
-		$route['post/delete'] = 'profile/delete_post';
-		$route['post/report'] = 'profile/report_post';
-		$route['(:any)/(:num)/has_read'] = 'profile/has_read';
-		$route['(:any)/(:num)/support'] = 'profile/support';
-		$route['(:any)/(:num)/efface'] = 'profile/efface';
-		$route['account'] = 'profile/account';
-		$route['account/change_password'] = 'profile/change_pass';
-		$route['(:any)'] = 'profile/index/$1';
-		$route['guest/(:num)'] = 'profile/view_guest/$1';
-		$route['(:any)/profile_thoughts'] = 'profile/profile_thoughts';
-		$route['(:any)/(:num)'] = 'profile/view/$1/$2';
+$route['logs'] = 'admin/logs';
+$route['logs/get_all'] = 'admin/get_all_logs';
 
-		$route['404_override'] = 'home/not_found';
-		$route['translate_uri_dashes'] = FALSE;
-        break;
-}
+// $route['login'] = 'admin/login';
+// $route['logout'] = 'admin/logout';
+// $route['dashboard'] = 'admin/index';
+// $route['sell'] = 'admin/posts';
+// $route['reports'] = 'admin/reports';
+// $route['customers'] = 'admin/customers';
+// $route['logs'] = 'admin/logs';
+// $route['posts/admin'] = 'admin/posts_admin';
+// $route['posts/users'] = 'admin/posts_users';
+// //Admin posts
+// $route['posts/get_customers'] = 'admin/get_customers';
+// $route['posts/add_post'] = 'admin/add_post';
+// $route['posts/view_post'] = 'admin/view_post';
+// $route['posts/edit_post'] = 'admin/edit_post';
+// $route['posts/delete_post'] = 'admin/delete_post';
+// //User posts
+// $route['posts/recover_post'] = 'admin/recover_post';
+// $route['posts/feature_post'] = 'admin/feature_post';
+// $route['posts/unfeature_post'] = 'admin/unfeature_post';
+// $route['posts/remove_post'] = 'admin/remove_post';
+// //Reports
+// $route['reports/posts'] = 'admin/reported_posts';
+// $route['reports/bugs'] = 'admin/reported_bugs';
+// $route['reports/view_post'] = 'admin/reported_view';
+// $route['reports/deny_report'] = 'admin/reported_deny';
+// $route['reports/remove_report'] = 'admin/reported_remove';
+// $route['reports/bug_done'] = 'admin/reported_bug_done';
+// //Users
+// $route['users/users'] = 'admin/get_users';
+// $route['users/admin'] = 'admin/get_admin';
+// $route['users/register'] = 'admin/register';
+// $route['users/deactivate_user'] = 'admin/deactivate_user';
+// $route['users/activate_user'] = 'admin/activate_user';
+// $route['users/ban_user'] = 'admin/ban_user';
+// $route['users/unban_user'] = 'admin/unban_user';
+// $route['users/admin_pass'] = 'admin/admin_change_pass';
+// $route['users/deactivate_admin'] = 'admin/deactivate_admin';
+// $route['users/activate_admin'] = 'admin/activate_admin';
+
+$route['logs/get'] = 'admin/get_logs';
+
+$route['change_pass'] = 'admin/change_pass';
+
+$route['404_override'] = '';
+$route['translate_uri_dashes'] = FALSE;
 

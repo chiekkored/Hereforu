@@ -10,9 +10,8 @@ class Logs_model extends CI_Model {
         $this->load->library('users_table');
       }
 
-    public function log($id, $message) {
+    public function log($message) {
         $log = array(
-          'user_id' => $id,
           'content' => $message
         );
     return $this->db->insert('logs', $log);

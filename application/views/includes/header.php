@@ -21,10 +21,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<?php endif; ?> -->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/placeholder-loading/dist/css/placeholder-loading.min.css"/>
 	<link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/css/custom.css">
-	<link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/css/dark-mode.css">
+	<!-- <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/css/dark-mode.css">
 	<link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/css/bs-tagsinput.css">
 	<link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/css/heart-switch.css">
-	<link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/css/efface.css">
+	<link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/css/efface.css"> -->
 	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body class="wall">

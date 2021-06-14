@@ -1,16 +1,16 @@
 <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
   <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3 text-lg-center" href="#">
-    <img class="mb-1" src="assets/img/logo.png" width="23" height="23"> HereForU</a>
+    <img class="mb-1" src="assets/img/gold-logo.png" width="25" height="25"> <b>THRIFTEES & MORE</b></a>
   </a>
   <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-  <ul class="navbar-nav px-3">
+  <!-- <ul class="navbar-nav px-3">
     <li class="nav-item form-inline">
       <a class="nav-link mx-2" data-toggle="modal" href="#changepass"><i class="fa fa-key"></i></a>
       <a class="nav-link mx-2" href="logout"><i class="fa fa-sign-out"></i></a>
     </li>
-  </ul>
+  </ul> -->
 </nav>
 
 
@@ -20,32 +20,33 @@
       <div class="position-sticky pt-3">
         <ul class="nav flex-column">
           <li class="nav-item my-1">
-            <a class="nav-link <?php if($this->uri->uri_string() === "" || $this->uri->segment(1) === "dashboard") : ?>active<?php endif; ?>" href="dashboard">
+            <a class="nav-link list-group-item list-group-item-action bg-light border-0 <?php if($this->uri->uri_string() === "" || $this->uri->segment(1) === "dashboard") : ?>active list-active<?php endif; ?>" href="dashboard">
               <span data-feather="home"></span>
               <small class="text-muted mx-2">Dashboard</small>
               <!-- <span class="badge badge-secondary float-right mt-1">3</span> -->
             </a>
           </li>
           <li class="nav-item my-1">
-            <a class="nav-link <?php if($this->uri->segment(1) === "posts") : ?>active<?php endif; ?>" href="posts">
-              <span data-feather="edit"></span>
-              <small class="text-muted mx-2">Posts</small>
+            <a class="nav-link list-group-item list-group-item-action bg-light border-0 <?php if($this->uri->segment(1) === "sell") : ?>active list-active<?php endif; ?>" href="sell">
+              <span data-feather="video" style="color: red;"></span>
+              <small class="text-muted mx-2">Sell</small>
+              <!-- <span class="badge badge-secondary float-right mt-1">3</span> -->
             </a>
           </li>
           <li class="nav-item my-1">
-            <a class="nav-link <?php if($this->uri->segment(1) === "reports") : ?>active<?php endif; ?>" href="reports">
-              <span data-feather="alert-triangle"></span>
-              <small class="text-muted mx-2">Reports</small>
+            <a class="nav-link list-group-item list-group-item-action bg-light border-0 <?php if($this->uri->segment(1) === "sales") : ?>active list-active<?php endif; ?>" href="sales">
+              <span data-feather="list"></span>
+              <small class="text-muted mx-2">Sales</small>
             </a>
           </li>
           <li class="nav-item my-1">
-            <a class="nav-link <?php if($this->uri->segment(1) === "users") : ?>active<?php endif; ?>" href="users">
+            <a class="nav-link list-group-item list-group-item-action bg-light border-0 <?php if($this->uri->segment(1) === "customers") : ?>active list-active<?php endif; ?>" href="customers">
               <span data-feather="users"></span>
-              <small class="text-muted mx-2">Users</small>
+              <small class="text-muted mx-2">Customers</small>
             </a>
           </li>
           <li class="nav-item my-1">
-            <a class="nav-link <?php if($this->uri->segment(1) === "logs") : ?>active<?php endif; ?>" href="logs">
+            <a class="nav-link list-group-item list-group-item-action bg-light border-0 <?php if($this->uri->segment(1) === "logs") : ?>active list-active<?php endif; ?>" href="logs">
               <span data-feather="file-text"></span>
               <small class="text-muted mx-2">Logs</small>
             </a>
